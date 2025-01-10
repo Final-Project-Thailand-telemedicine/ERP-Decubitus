@@ -1,0 +1,15 @@
+<h3>Password Recovery</h3>
+<form [formGroup]="data" (ngSubmit)="sendRecoveryLink()">
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" formControlName="email" placeholder="Enter email" />
+    <mat-error *ngIf="data.get('email')?.hasError('email')">
+      Invalid email address.
+    </mat-error>
+    <mat-error *ngIf="data.get('email')?.hasError('required')">
+      Email is required.
+    </mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit">Send Recovery Link</button>
+  <button mat-button color="warn" (click)="cancel()">Cancel</button>
+</form>

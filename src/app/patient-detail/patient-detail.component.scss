@@ -1,0 +1,66 @@
+.transactions {
+    .transaction-wrapper {
+      overflow: auto;
+      height: 185px;
+    }
+    .title {
+      padding: 20px;
+      padding-bottom: 5px;
+      text-align: center;
+      color: #333333;
+      font-size: 18px;
+      font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica,
+        sans-serif;
+    }
+    .transaction {
+      display: flex;
+      align-items: center;
+      padding: 5px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      .image {
+        width: 55px;
+        img {
+          width: 45px;
+          height: 45px;
+          object-fit: cover;
+        }
+      }
+      .name {
+        padding: 10px;
+        font-size: 16px;
+        flex: 1;
+        min-width: 0;
+      }
+      .position {
+        padding: 10px;
+        font-size: 16px;
+        flex: 0 0 400px;
+        min-width: 0;
+      }
+      .shop-location {
+        padding: 10px;
+        font-size: 16px;
+        flex: 1;
+        min-width: 0;
+        .wound {
+          margin-top: 4px;
+          font-size: 14px;
+          color: grey;
+        }
+      }
+      .status {
+        padding: 10px;
+        font-size: 15px;
+        text-transform: uppercase;
+        font-weight: bold;
+        flex: 0 0 300px;
+        min-width: 0;
+        &.confirmed {
+          color: #20fb2e;
+        }
+        &.pending {
+          color: #ff0000;;
+        }
+      }
+    }
+  }
