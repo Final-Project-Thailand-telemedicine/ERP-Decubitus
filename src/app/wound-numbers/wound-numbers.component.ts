@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { HighchartsChartModule} from 'highcharts-angular'
-import Highcharts, { Options, SeriesOptionsType, PointOptionsObject } from 'highcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'app-wound-numbers',
@@ -11,41 +11,41 @@ import Highcharts, { Options, SeriesOptionsType, PointOptionsObject } from 'high
 })
 export class WoundNumbersComponent {
   chart = Highcharts;
-    chartOptions: Options = {
-      chart: {
-        type: 'pie',
-        height: 325
-      },
-      title: {
-        text: 'จำนวนผู้ป่วยจำแนกตามการรักษา',
-        align: 'left'
-      },
-      tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-      },
-      accessibility: {
-        point: {
-          valueSuffix: '%'
-        }
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: true,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            format: '<b>{point.name}</b>: {point.y} แผล'
-          },
-          showInLegend: false
-        }
-      },
-      legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle'
-      },
-      series: [
-       {
+  chartOptions: Highcharts.Options = {
+    chart: {
+      type: 'pie',
+      height: 325
+    },
+    title: {
+      text: 'จำนวนผู้ป่วยจำแนกตามการรักษา',
+      align: 'left'
+    },
+    tooltip: {
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+      point: {
+        valueSuffix: '%'
+      }
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          format: '<b>{point.name}</b>: {point.y} แผล'
+        },
+        showInLegend: false
+      }
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle'
+    },
+    series: [
+      {
         type: 'pie',
         data: [
           {
@@ -69,16 +69,22 @@ export class WoundNumbersComponent {
             color: '#6920fb',
           },
         ]
-       }
-      ],
-      credits: {
-        enabled: false
       }
-    };
-
-    getTotal(): number {
-      const data = (this.chartOptions.series![0] as Highcharts.SeriesPieOptions).data as Highcharts.PointOptionsObject[];
-      return data.reduce((total, point) => total + point.y!, 0);
+    ],
+    credits: {
+      enabled: false
     }
+  };
+
+  getTotal(): number {
+    const series = this.chartOptions.series?.[0] as Highcharts.SeriesPieOptions;
+    if (!series || !series.data) return 0;
     
+    return (series.data as Array<Highcharts.PointOptionsObject>).reduce((total, point) => {
+      if (point && typeof point === 'object' && point.y !== undefined) {
+        return total + (point.y || 0);
+      }
+      return total;
+    }, 0);
+  }
 }
