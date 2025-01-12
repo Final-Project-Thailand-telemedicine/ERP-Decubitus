@@ -2,13 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceService {
 
-  constructor(private _httpClient: HttpClient) { }
+  constructor(
+    private _httpClient: HttpClient,
+    private router: Router
+  ) { }
 
   getlist(): Observable<any[]> {
     return this._httpClient.get<any[]>(
@@ -22,9 +26,10 @@ export class ServiceService {
   login(credentials: { username: string; password: string }) {
     // Simulate login
     if (credentials.username === 'admin' && credentials.password === 'admin') {
-      return of({ success: true });
+      localStorage.setItem('token', 'authenticated');
+      this.router.navigate(['/dashboard']);
     } else {
-      throw new Error('Invalid credentials');
+      alert('Invalid credentials!');
     }
   }
 

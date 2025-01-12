@@ -43,10 +43,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => alert('Login successful!'),
-        error: () => alert('Invalid credentials.'),
-      });
+      this.authService.login(this.loginForm.value);
     }
   }
 

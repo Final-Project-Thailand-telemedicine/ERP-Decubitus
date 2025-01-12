@@ -10,10 +10,5 @@ export const navbarData = [
         routeLink: 'table',
         icon: faChartSimple,
         label: 'Table'
-    },
-    {
-        routeLink: 'login',
-        icon: faUser,
-        label: 'Login'
-    },
+    }
 ];

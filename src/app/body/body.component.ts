@@ -10,17 +10,20 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./body.component.scss']
 })
 export class BodyComponent {
-
   @Input() collapsed = false;
   @Input() screenWidth = 0;
+  @Input() showSidebar = true;
 
   getBodyClass(): string {
-    let styleClass = '';
-    if(this.collapsed && this.screenWidth > 768) {
-      styleClass = 'body-trimmed';
-    } else if(this.collapsed && this.screenWidth <= 768 && this.screenWidth > 0) {
-      styleClass = 'body-md-screen'
+    if (!this.showSidebar) {
+      return 'body-full';
     }
-    return styleClass;
+    
+    if (this.collapsed && this.screenWidth > 768) {
+      return 'body-trimmed';
+    } else if (this.collapsed && this.screenWidth <= 768 && this.screenWidth > 0) {
+      return 'body-md-screen';
+    }
+    return '';
   }
 }
