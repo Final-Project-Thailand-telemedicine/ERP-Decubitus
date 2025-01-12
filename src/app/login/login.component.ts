@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { RecoveryModalComponent } from '../recovery-modal/recovery-modal.component';
-import { ServiceService } from '../service/service.service';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -22,13 +22,13 @@ import { ServiceService } from '../service/service.service';
     MatDialogModule,
   ],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   loginForm: FormGroup;
   recoveryForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private authService: ServiceService,
+    private authService: AuthService,
     private dialog: MatDialog
   ) {
     this.loginForm = this.fb.group({
@@ -39,6 +39,10 @@ export class LoginComponent {
     this.recoveryForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
+  }
+
+  ngOnInit() {
+    localStorage.clear();
   }
 
   onSubmit() {

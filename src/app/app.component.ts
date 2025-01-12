@@ -4,7 +4,6 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { CommonModule } from '@angular/common';
 import { BodyComponent } from './body/body.component';
 import { filter } from 'rxjs';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -16,21 +15,26 @@ interface SideNavToggle {
   standalone: true,
   imports: [RouterModule, SidenavComponent, CommonModule, BodyComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'sidenav';
 
   isSideNavCollapsed = false;
   screenWidth = 0;
-  showSidebar = false;
+  showSidebar = true; // Default to showing the sidebar
+
+  // List of routes where the sidebar should be shown
+  private routesWithSidebar = ['/dashboard' , '/table'];
 
   constructor(private router: Router) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        this.showSidebar = event.url !== '/login';
-        // Reset body layout when sidebar is hidden
+        // Check if the current route is in the allowed list for showing the sidebar
+        this.showSidebar = this.routesWithSidebar.includes(event.url);
+
+        // Reset layout when hiding the sidebar
         if (!this.showSidebar) {
           this.screenWidth = window.innerWidth;
           this.isSideNavCollapsed = false;
@@ -42,5 +46,4 @@ export class AppComponent {
     this.screenWidth = data.screenWidth;
     this.isSideNavCollapsed = data.collapsed;
   }
-
 }

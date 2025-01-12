@@ -1,4 +1,4 @@
-import { faHouse, faUser ,faChartSimple} from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faUser ,faChartSimple,faSignOut} from '@fortawesome/free-solid-svg-icons';
 
 export const navbarData = [
     {
@@ -10,5 +10,10 @@ export const navbarData = [
         routeLink: 'table',
         icon: faChartSimple,
         label: 'Table'
-    }
+    },
+    {
+        routeLink: 'login',
+        icon: faSignOut,
+        label: 'Login'
+    },
 ];
