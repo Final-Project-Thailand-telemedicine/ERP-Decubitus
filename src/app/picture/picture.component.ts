@@ -32,8 +32,9 @@ export class PictureComponent implements OnInit, OnDestroy {
   // -----------------------------------------------------------------------------------------------------
 
   ngOnInit(): void {
-    this.imgSelected = environment.baseURL + this._data.imgSelected;
-
+    this.imgSelected = environment.ImageURL + this._data.imgSelected;
+    console.log(this.imgSelected);
+    
   }
 
   ngOnDestroy(): void {
@@ -49,11 +50,6 @@ export class PictureComponent implements OnInit, OnDestroy {
   onImageLoad(): void {
     this.loading = false;
     this.error = false;
-  }
-
-  onImageError(): void {
-    this.loading = false;
-    this.error = true;
   }
 
   closeDialog(): void {

@@ -12,7 +12,7 @@
         </div>
 
         <!-- Image -->
-        <img *ngIf="imgSelected" [src]="imgSelected" (load)="onImageLoad()" (error)="onImageError()"
+        <img *ngIf="imgSelected" [src]="imgSelected" (load)="onImageLoad()"
             [class.hidden]="loading || error" [alt]="'Full size image'" role="img" />
     </div>
 </div>
