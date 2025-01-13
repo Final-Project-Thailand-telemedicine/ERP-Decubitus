@@ -24,15 +24,18 @@ export class AppComponent {
   screenWidth = 0;
   showSidebar = true; // Default to showing the sidebar
 
-  // List of routes where the sidebar should be shown
-  private routesWithSidebar = ['/dashboard' , '/table'];
+  private routesWithSidebar = ['/dashboard', '/patients', '/nurses'];
 
   constructor(private router: Router) {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: any) => {
         // Check if the current route is in the allowed list for showing the sidebar
-        this.showSidebar = this.routesWithSidebar.includes(event.url);
+        this.showSidebar = (
+          this.routesWithSidebar.includes(event.url) &&
+          !!localStorage.getItem('token') // Convert the value to a boolean
+        );
+
 
         // Reset layout when hiding the sidebar
         if (!this.showSidebar) {

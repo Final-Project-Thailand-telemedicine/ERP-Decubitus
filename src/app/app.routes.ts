@@ -5,11 +5,15 @@ import { LoginComponent } from './login/login.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AuthGuard } from './auth.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { PatientTableComponent } from './patient-table/patient-table.component';
+import { NurseTableComponent } from './nurse-table/nurse-table.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Simple redirection
-    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }, // Guard applied here
     { path: 'login', component: LoginComponent }, // Login route
-    { path: 'table', component: TableComponent, canActivate: [AuthGuard] }, // Guard applied to other routes
+    // { path: 'table', component: TableComponent, canActivate: [AuthGuard] },
+    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }, // Guard applied here
+    { path: 'patients', component: PatientTableComponent, canActivate: [AuthGuard] }, // Guard applied here
+    { path: 'nurses', component: NurseTableComponent, canActivate: [AuthGuard] }, // Guard applied here
     { path: '**', component: NotFoundComponent }, // Wildcard route for 404
 ];
