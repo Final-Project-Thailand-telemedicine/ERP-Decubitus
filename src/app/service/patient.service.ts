@@ -26,4 +26,14 @@ export class PatientService {
         })
       );
   }
+
+  create(data: FormData): Observable<any> {
+    return this._httpClient
+        .post<any>(environment.baseURL + '/api/product', data)
+        .pipe(
+          switchMap((response: any) => {
+            return of(response.data);
+          })
+        );
+}
 }

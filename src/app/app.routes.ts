@@ -9,7 +9,7 @@ import { PatientTableComponent } from './patient-table/patient-table.component';
 import { NurseTableComponent } from './nurse-table/nurse-table.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Simple redirection
+    { path: '', redirectTo: 'login', pathMatch: 'full' }, // Simple redirection
     { path: 'login', component: LoginComponent }, // Login route
     // { path: 'table', component: TableComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }, // Guard applied here

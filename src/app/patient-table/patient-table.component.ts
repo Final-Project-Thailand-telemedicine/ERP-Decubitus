@@ -8,8 +8,9 @@ import { PatientService } from '../service/patient.service';
 import { Config } from 'datatables.net';
 import { Subject } from 'rxjs';
 import { PictureComponent } from '../picture/picture.component';
-import { faXmark ,faFileImage} from '@fortawesome/free-solid-svg-icons';
+import { faXmark ,faFileImage,faPlusSquare} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormComponent } from './form/form.component';
 @Component({
   selector: 'app-patient-table',
   standalone: true,
@@ -32,6 +33,7 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit{
     ) { }
     fafileimage= faFileImage;
     faXmark = faXmark;
+    faPlusSquare = faPlusSquare
     dtOptions: Config = {};
     dtTrigger: Subject<any> = new Subject();
     @ViewChild(DataTableDirective)
@@ -59,6 +61,21 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit{
         .subscribe(() => {
 
         });
+    }
+
+    addElement() {
+      const dialogRef = this.dialog.open(FormComponent, {
+        width: '800px',
+        height: 'auto',
+        disableClose: true,
+  
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.rerender();
+        }
+      });
     }
 
     pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
