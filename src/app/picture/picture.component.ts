@@ -5,11 +5,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Subject } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-picture',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule,FontAwesomeModule],
   templateUrl: './picture.component.html',
   styleUrl: './picture.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,6 +21,7 @@ export class PictureComponent implements OnInit, OnDestroy {
   imgSelected: string | undefined;
   loading: boolean = true;
   error: boolean = false;
+  faXmark = faXmark;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private _data: any,

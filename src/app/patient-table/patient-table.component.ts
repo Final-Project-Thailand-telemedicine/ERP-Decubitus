@@ -8,16 +8,17 @@ import { PatientService } from '../service/patient.service';
 import { Config } from 'datatables.net';
 import { Subject } from 'rxjs';
 import { PictureComponent } from '../picture/picture.component';
+import { faXmark ,faFileImage} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @Component({
   selector: 'app-patient-table',
   standalone: true,
   imports: [
     CommonModule,
     DataTablesModule,
-    MatIconModule,
-    MatProgressBarModule,
     NgFor,
     NgIf,
+    FontAwesomeModule
   ],
   templateUrl: './patient-table.component.html',
   styleUrl: './patient-table.component.scss'
@@ -29,7 +30,8 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit{
       private _changeDetectorRef: ChangeDetectorRef,
       private dialog: MatDialog,
     ) { }
-
+    fafileimage= faFileImage;
+    faXmark = faXmark;
     dtOptions: Config = {};
     dtTrigger: Subject<any> = new Subject();
     @ViewChild(DataTableDirective)

@@ -33,7 +33,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css"
             ],
             "scripts": [
