@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { RecoveryModalComponent } from '../recovery-modal/recovery-modal.component';
 import { AuthService } from '../service/auth.service';
+import { KeyService } from '../service/key.service';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _KeyService: KeyService
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -45,9 +47,12 @@ export class LoginComponent implements OnInit{
     localStorage.clear();
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value);
+      const data = this.loginForm.value;
+      
+      data.password = await this._KeyService.encryptPassword(data.password);
+      this.authService.login(data);
     }
   }
 
