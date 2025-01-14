@@ -10,7 +10,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { PatientService } from '../../service/patient.service';
 import { CommonService } from '../../service/common.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faXmark ,faFileImage,faPlusSquare} from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faFileImage, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { environment } from '../../../environments/environment.development';
+import { KeyService } from '../../service/key.service';
 
 @Component({
   selector: 'app-form',
@@ -23,13 +27,15 @@ import { faXmark ,faFileImage,faPlusSquare} from '@fortawesome/free-solid-svg-ic
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
 export class FormComponent implements OnInit {
-  productForm: FormGroup = new FormGroup({});
+  patientForm: FormGroup = new FormGroup({});
   isEdit = false;
   imagePreview: string | null = null;
   imageFormData: FormData = new FormData()
@@ -38,13 +44,14 @@ export class FormComponent implements OnInit {
   units: any[] = [];
   productTypes: any[] = [];
 
-  faFileImage=faFileImage;
+  faFileImage = faFileImage;
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<FormComponent>,
     private _Patientservice: PatientService,
     private _Commonservice: CommonService,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _keyService: KeyService
   ) {
     this.isEdit = !!data;
     this.initForm();
@@ -55,13 +62,15 @@ export class FormComponent implements OnInit {
   }
 
   private initForm() {
-    this.productForm = this.fb.group({
-      name: ['', Validators.required],
-      price: ['', Validators.required],
-      value: ['', Validators.required],
-      unit_id: ['', Validators.required],
-      product_type_id: ['', Validators.required],
-      image: [null]
+    this.patientForm = this.fb.group({
+      ssid: ['', Validators.required],
+      sex: ['', Validators.required],
+      phone: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      birthdate: ['', Validators.required],
+      password: ['', Validators.required],
+      profile_image: [null]
     });
   }
 
@@ -73,23 +82,20 @@ export class FormComponent implements OnInit {
         this.imagePreview = reader.result as string;
       };
       reader.readAsDataURL(file);
-  
+
       this.imageFormData.append('file', file);
-  
+
       this.uploadImage(this.imageFormData); // No need to assign to a variable here
     }
   }
-  
+
   uploadImage(formData: FormData) {
     this._Commonservice.uploadImg(formData).subscribe(
       (response) => {
-        console.log('Image uploaded successfully', response);
-  
+        console.log('Image uploaded successfully', response.path);
+
         // Patch the form value here
-        this.productForm.patchValue({ image: response });
-  
-        // Log the path after setting it
-        console.log('Patched image path:', response);
+        this.patientForm.patchValue({ profile_image: response.path });
       },
       (error) => {
         console.error('Error uploading image', error);
@@ -97,17 +103,17 @@ export class FormComponent implements OnInit {
     );
   }
 
-  onSubmit() {
-    if (this.productForm.valid) {
-      // Create FormData for file upload
-      const formData = new FormData();
-      const formValue = this.productForm.value;
 
-      Object.keys(formValue).forEach(key => {
-        formData.append(key, formValue[key]);
-      });
+  async onSubmit() {
+    if (this.patientForm.valid) {
+      const formValue = { ...this.patientForm.value };
 
-      this._Patientservice.create(formData).subscribe({
+      formValue.password = await this._keyService.encryptPassword(formValue.password);
+      // Add roleId
+      formValue.roleId = 2;
+
+
+      this._Patientservice.create(formValue).subscribe({
         next: (response) => {
           console.log('Product created successfully', response);
         },
@@ -116,7 +122,7 @@ export class FormComponent implements OnInit {
         }
       });
 
-      this.dialogRef.close(formData);
+      this.dialogRef.close(formValue);
     }
   }
 }

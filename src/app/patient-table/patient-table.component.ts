@@ -72,9 +72,8 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit{
       });
   
       dialogRef.afterClosed().subscribe(result => {
-        if (result) {
+          
           this.rerender();
-        }
       });
     }
 

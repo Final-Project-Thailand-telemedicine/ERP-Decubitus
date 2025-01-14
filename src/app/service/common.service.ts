@@ -15,12 +15,12 @@ export class CommonService {
   uploadImg(img: FormData): Observable<any> {
     return this._httpClient
       .post(
-        environment.baseURL + '/api/upload_product_image',
+        environment.baseURL + '/upload/file',
         img,
       )
       .pipe(
         switchMap((response: any) => {
-          return of(response.data);
+          return of(response);
         })
       );
   }
