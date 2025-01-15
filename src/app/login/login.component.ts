@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,7 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { RecoveryModalComponent } from '../recovery-modal/recovery-modal.component';
-import { ServiceService } from '../service/service.service';
+import { AuthService } from '../service/auth.service';
+import { KeyService } from '../service/key.service';
 
 @Component({
   selector: 'app-login',
@@ -22,14 +23,15 @@ import { ServiceService } from '../service/service.service';
     MatDialogModule,
   ],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   loginForm: FormGroup;
   recoveryForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private authService: ServiceService,
-    private dialog: MatDialog
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private _KeyService: KeyService
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -41,12 +43,16 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
+  ngOnInit() {
+    localStorage.clear();
+  }
+
+  async onSubmit() {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => alert('Login successful!'),
-        error: () => alert('Invalid credentials.'),
-      });
+      const data = this.loginForm.value;
+      
+      data.password = await this._KeyService.encryptPassword(data.password);
+      this.authService.login(data);
     }
   }
 

@@ -1,0 +1,18 @@
+<div class="dialog-container" >
+    <!-- Close button -->
+    <button mat-icon-button class="close-button" (click)="closeDialog()">
+        <fa-icon [icon]="faXmark"></fa-icon>
+    </button>
+
+    <!-- Image container -->
+    <div class="image-container">
+        <!-- Loading state -->
+        <div *ngIf="loading" class="loading-skeleton" role="progressbar">
+            <div class="loading-animation"></div>
+        </div>
+
+        <!-- Image -->
+        <img *ngIf="imgSelected" [src]="imgSelected" (load)="onImageLoad()"
+            [class.hidden]="loading || error" [alt]="'Full size image'" role="img" />
+    </div>
+</div>
