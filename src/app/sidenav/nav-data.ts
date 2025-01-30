@@ -22,8 +22,8 @@ export const navbarData = [
         label: 'Nurses'
     },
     {
-        routeLink: 'login',
+        routeLink: 'signout',
         icon: faSignOut,
-        label: 'Login'
+        label: 'Logout'
     },
 ];

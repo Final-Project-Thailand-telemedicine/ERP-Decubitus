@@ -59,4 +59,5 @@ export class SidenavComponent implements OnInit {
   getIcon(IconName: string) {
     // Implement your icon logic here
   }
+  
 }
