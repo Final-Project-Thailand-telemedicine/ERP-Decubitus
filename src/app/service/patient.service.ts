@@ -12,7 +12,7 @@ export class PatientService {
 
   constructor(private _httpClient: HttpClient) { }
 
-  getPage(dataTablesParameters: any,id:number = 2): Observable<DataTablesResponse> {
+  getPage(dataTablesParameters: any, id: number = 2): Observable<DataTablesResponse> {
 
     return this._httpClient
       .get(
@@ -29,11 +29,31 @@ export class PatientService {
 
   create(data: FormData): Observable<any> {
     return this._httpClient
-        .post<any>(environment.baseURL + '/users/register', data)
-        .pipe(
-          switchMap((response: any) => {
-            return of(response.data);
-          })
-        );
-}
+      .post<any>(environment.baseURL + '/users/register', data)
+      .pipe(
+        switchMap((response: any) => {
+          return of(response);
+        })
+      );
+  }
+
+  getbyID(id:number): Observable<any> {
+    return this._httpClient
+      .get<any>(environment.baseURL + '/users/' + id)
+      .pipe(
+        switchMap((response: any) => {
+          return of(response);
+        })
+      );
+  }
+
+  update(data: FormData,id:number): Observable<any> {
+    return this._httpClient
+      .patch<any>(environment.baseURL + '/users/'+id, data)
+      .pipe(
+        switchMap((response: any) => {
+          return of(response);
+        })
+      );
+  }
 }
