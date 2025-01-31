@@ -1,16 +1,16 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { DataTableDirective, DataTablesModule } from 'angular-datatables';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { PatientService } from '../service/patient.service';
+import { MatIconModule } from '@angular/material/icon';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFileImage, faPen, faPlusSquare, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
 import { Subject } from 'rxjs';
 import { PictureComponent } from '../picture/picture.component';
-import { faXmark ,faFileImage,faPen,faTrash, faPlusSquare} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NurseService } from '../service/nurse.service';
 import { FormComponent } from './form/form.component';
+import { EditNurseComponent } from './edit-nurse/edit-nurse.component';
 
 
 @Component({
@@ -30,7 +30,7 @@ import { FormComponent } from './form/form.component';
 export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
   constructor
   (
-    private _patientService: PatientService,
+    private _nurseService: NurseService,
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
   ) { }
@@ -94,7 +94,7 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
         url: this.languageUrl,
       },
       ajax: (dataTablesParameters: any, callback) => {
-        that._patientService
+        that._nurseService
           .getPage(dataTablesParameters)
           .subscribe((resp: any) => {
             console.log(resp);
@@ -132,23 +132,34 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
   }
 
   rerender(): void {
-    if (this.dtElement.dtInstance) {
-      this.dtElement.dtInstance.then((dtInstance) => {
-        dtInstance.ajax.reload();
-      });
-    } else {
-      // If DataTables instance is not ready, reinitialize
-      this.dtTrigger.next(null);
-    }
+    this.loadTable();
+    this.dtElement.dtInstance.then((dtInstance) => {
+      dtInstance.ajax.reload();
+    });
   }
 
   faPen = faPen;  
   editElement(id: number) {
-    console.log('Edit user with ID:', id);
+    const dialogRef = this.dialog.open(EditNurseComponent, {
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+      data: {
+        id: id,
+      },
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+        
+        this.rerender();
+    });
   }
 
   faTrash = faTrash;
   deleteElement(id: number) {
-    console.log('Delete user with ID:', id);
+    this._nurseService.delete(id).subscribe((resp: any) => {
+      this.rerender();
+    });
   }
 }

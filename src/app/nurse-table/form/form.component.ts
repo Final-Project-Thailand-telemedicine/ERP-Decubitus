@@ -2,19 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { PatientService } from '../../service/patient.service';
-import { CommonService } from '../../service/common.service';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faXmark, faFileImage, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { environment } from '../../../environments/environment.development';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFileImage } from '@fortawesome/free-solid-svg-icons';
+import { CommonService } from '../../service/common.service';
 import { KeyService } from '../../service/key.service';
+import { NurseService } from '../../service/nurse.service';
 
 @Component({
   selector: 'app-form',
@@ -35,7 +33,7 @@ import { KeyService } from '../../service/key.service';
   styleUrl: './form.component.scss'
 })
 export class FormComponent implements OnInit {
-  patientForm: FormGroup = new FormGroup({});
+  nurseForm: FormGroup = new FormGroup({});
   isEdit = false;
   imagePreview: string | null = null;
   imageFormData: FormData = new FormData()
@@ -48,7 +46,7 @@ export class FormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<FormComponent>,
-    private _Patientservice: PatientService,
+    private _Nurseservice: NurseService,
     private _Commonservice: CommonService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _keyService: KeyService
@@ -62,7 +60,7 @@ export class FormComponent implements OnInit {
   }
 
   private initForm() {
-    this.patientForm = this.fb.group({
+    this.nurseForm = this.fb.group({
       ssid: ['', Validators.required],
       sex: ['', Validators.required],
       phone: ['', Validators.required],
@@ -95,7 +93,7 @@ export class FormComponent implements OnInit {
         console.log('Image uploaded successfully', response.path);
 
         // Patch the form value here
-        this.patientForm.patchValue({ profile_image: response.path });
+        this.nurseForm.patchValue({ profile_image: response.path });
       },
       (error) => {
         console.error('Error uploading image', error);
@@ -105,15 +103,15 @@ export class FormComponent implements OnInit {
 
 
   async onSubmit() {
-    if (this.patientForm.valid) {
-      const formValue = { ...this.patientForm.value };
+    if (this.nurseForm.valid) {
+      const formValue = { ...this.nurseForm.value };
 
       formValue.password = await this._keyService.encryptPassword(formValue.password);
       // Add roleId
-      formValue.roleId = 2;
+      formValue.roleId = 3;
 
 
-      this._Patientservice.create(formValue).subscribe({
+      this._Nurseservice.create(formValue).subscribe({
         next: (response) => {
           console.log('Product created successfully', response);
         },

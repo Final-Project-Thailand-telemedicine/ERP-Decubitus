@@ -24,4 +24,20 @@ export class CommonService {
         })
       );
   }
+
+  getProfile(): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this._httpClient
+      .get<any>(environment.baseURL + '/users/profilebytoken/'+token, {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }
+      )
+      .pipe(
+        switchMap((response: any) => {
+          return of(response);
+        })
+      );
+  }
 }

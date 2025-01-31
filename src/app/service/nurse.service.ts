@@ -8,11 +8,11 @@ import { DataTablesResponse } from '../../type/datatable.type';
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
+export class NurseService {
 
   constructor(private _httpClient: HttpClient) { }
 
-  getPage(dataTablesParameters: any, id: number = 2): Observable<DataTablesResponse> {
+  getPage(dataTablesParameters: any, id: number = 3): Observable<DataTablesResponse> {
 
     return this._httpClient
       .get(
