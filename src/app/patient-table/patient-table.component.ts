@@ -8,7 +8,7 @@ import { PatientService } from '../service/patient.service';
 import { Config } from 'datatables.net';
 import { Subject } from 'rxjs';
 import { PictureComponent } from '../picture/picture.component';
-import { faXmark ,faFileImage,faPlusSquare} from '@fortawesome/free-solid-svg-icons';
+import { faXmark ,faFileImage,faPlusSquare, faTrash, faPen} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormComponent } from './form/form.component';
 @Component({
@@ -138,4 +138,23 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit{
         this.dtTrigger.next(null);
       }
     }
+
+    faPen = faPen;  
+      editElement(id: number) {
+        console.log('Edit user with ID:', id);
+        const dialogRef = this.dialog.open(FormComponent, {
+          width: '800px',
+          height: 'auto',
+          disableClose: true,
+    
+        });
+        
+      }
+    
+    faTrash = faTrash;
+      deleteElement(id: number) {
+        console.log('Delete user with ID:', id);
+      }
+
+    
 }

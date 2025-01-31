@@ -1,1 +1,71 @@
-<p>nurse-table works!</p>
+<div class="container">
+
+    <!-- Header Section -->
+    <div class="header">
+        <div class="header-content">
+            <h1>พยาบาล</h1>
+            <div class="header-controls">
+                <button
+                    class="add-button"
+                    mat-flat-button (click)="addElement()">
+                    <fa-icon [icon]="faPlusSquare"></fa-icon>
+                    <span class="ml-2">add</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="table-container">
+            <div class="table-wrapper">
+                <table datatable [dtOptions]="dtOptions" class="data-table">
+                    <thead>
+                        <tr class="table-header">
+                            <th class="table-cell">จัดการ</th>
+                            <th class="table-cell">ลําดับ</th>
+                            <th class="table-cell">ชื่อ</th>
+                            <th class="table-cell">นามสกุล</th>
+                            <th class="table-cell">เพศ</th>
+                            <th class="table-cell">รูปภาพ</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="dataRow?.length != 0" class="table-body">
+                        <tr *ngFor="let item of dataRow; let i = index" class="table-row">
+                            <!-- Actions Column -->
+                            <td class="table-cell text-center">
+                                <div class="action-buttons">
+                                    <!-- Edit Button -->
+                                    <button mat-icon-button class="edit-button"
+                                        (click)="editElement(item.id)">
+                                        <fa-icon [icon]="faPen"></fa-icon> <!-- Pencil icon -->
+                                    </button>
+                    
+                                    <!-- Delete Button -->
+                                    <button mat-icon-button class="delete-button"
+                                        (click)="deleteElement(item.id)">
+                                        <fa-icon [icon]="faTrash"></fa-icon> <!-- Bin icon -->
+                                    </button>
+                                </div>
+                            </td>
+                    
+                            <!-- Other Columns -->
+                            <td class="table-cell text-center">{{ i + 1 }}</td>
+                            <td class="table-cell text-center">{{ item.first_name || "-" }}</td>
+                            <td class="table-cell text-center">{{ item.last_name || "-" }}</td>
+                            <td class="table-cell text-center">{{ item.sex || "-" }}</td>
+                            <td class="table-cell text-center">
+                                <button mat-button class="view-button" (click)="showPicture(item.profile_image)">
+                                    <fa-icon [icon]="fafileimage"></fa-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>                    
+                    <tbody *ngIf="dataRow?.length == 0">
+                        <td colspan="6" class="no-data-message">ไม่พบข้อมูล</td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
