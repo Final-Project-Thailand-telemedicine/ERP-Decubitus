@@ -31,4 +31,14 @@ export class DashboardService {
         })
       );
   }
+
+  getMiddleWidgets2(): Observable<any> {
+    return this._httpClient
+      .get<any>(environment.baseURL + '/dashboard/middlewiget2' )
+      .pipe(
+        switchMap((response: any) => {
+          return of(response);
+        })
+      );
+  }
 }

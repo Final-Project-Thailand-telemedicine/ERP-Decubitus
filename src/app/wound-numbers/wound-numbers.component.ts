@@ -1,15 +1,38 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
+import { DashboardService } from '../service/dashboard.service';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-wound-numbers',
   standalone: true,
-  imports: [HighchartsChartModule],
+  imports: [HighchartsChartModule,NgIf],
   templateUrl: './wound-numbers.component.html',
   styleUrls: ['./wound-numbers.component.scss']
 })
-export class WoundNumbersComponent {
+export class WoundNumbersComponent implements OnInit {
+  constructor(private dashboardService: DashboardService, private cdr: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.dashboardService.getMiddleWidgets2().subscribe((response: any) => {
+      const formattedData = response.map((item: any) => ({
+        name: item.name,
+        y: item.data,
+        color: item.color
+      }));
+  
+      setTimeout(() => {
+        this.chartOptions = { // Replace the entire object
+          ...this.chartOptions,
+          series: [{ type: 'pie', data: formattedData }]
+        };
+        this.cdr.detectChanges(); // Ensure UI updates
+      }, 100);
+    });
+  }
+  
+
   chart = Highcharts;
   chartOptions: Highcharts.Options = {
     chart: {
@@ -21,7 +44,7 @@ export class WoundNumbersComponent {
       align: 'left'
     },
     tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
     },
     accessibility: {
       point: {
@@ -47,28 +70,7 @@ export class WoundNumbersComponent {
     series: [
       {
         type: 'pie',
-        data: [
-          {
-            name: 'ผู้ป่วยที่แผลมีความรุนแรงเท่าเดิม',
-            y: 20,
-            color: '#044342',
-          },
-          {
-            name: 'ผู้ป่วยที่แผลมีความรุนแรงมากขึ้น',
-            y: 40,
-            color: '#7e0505',
-          },
-          {
-            name: 'ผู้ป่วยที่แผลมีความรุนแรงลดลง',
-            y: 365,
-            color: '#ed9e20',
-          },
-          {
-            name: 'ผู้ป่วยที่แผลหายเเล้ว',
-            y: 300,
-            color: '#6920fb',
-          },
-        ]
+        data: []
       }
     ],
     credits: {
