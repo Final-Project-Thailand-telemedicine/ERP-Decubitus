@@ -41,4 +41,14 @@ export class DashboardService {
         })
       );
   }
+
+  getBottomWidgets(): Observable<any> {
+    return this._httpClient
+      .get<any>(environment.baseURL + '/dashboard/bottomwiget' )
+      .pipe(
+        switchMap((response: any) => {
+          return of(response);
+        })
+      );
+  }
 }

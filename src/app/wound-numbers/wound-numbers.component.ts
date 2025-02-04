@@ -40,7 +40,7 @@ export class WoundNumbersComponent implements OnInit {
       height: 325
     },
     title: {
-      text: 'จำนวนผู้ป่วยจำแนกตามการรักษา',
+      text: 'จำนวนแผลจำแนกตามอาการ',
       align: 'left'
     },
     tooltip: {
