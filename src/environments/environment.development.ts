@@ -1,4 +1,6 @@
 export const environment = {
+    //baseURL: 'https://backend.tanpy.xyz:3000/api/v0',
+    // ImageURL: 'http://backend.tanpy.xyz:3000/',
     baseURL: 'http://localhost:3000/api/v0',
     ImageURL: 'http://localhost:3000/',
     publicKey: `-----BEGIN PUBLIC KEY-----
