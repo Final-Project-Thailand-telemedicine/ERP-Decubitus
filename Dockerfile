@@ -14,11 +14,12 @@ RUN npm run build --configuration=production
 # Step 2: Use Nginx to Serve the Built Angular App
 FROM nginx:alpine
 
-# Remove default Nginx page
-RUN rm -rf /usr/share/nginx/html/*
-
 # Copy Angular build output to Nginx HTML directory
-COPY --from=builder /app/dist/decubitus-erp /usr/share/nginx/html
+# Modified to match your angular.json outputPath
+COPY --from=builder /app/dist/decubitus-erp/browser/* /usr/share/nginx/html/
+
+# Copy custom Nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Ensure correct permissions
 RUN chmod -R 755 /usr/share/nginx/html
