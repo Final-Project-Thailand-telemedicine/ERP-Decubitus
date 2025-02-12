@@ -39,8 +39,8 @@ export class AuthService {
 
         // Decode JWT to get role ID
         const decodedToken: any = jwtDecode(token);
-        // const roleId = decodedToken.roleId; // Adjust if necessary
-        const roleId = 1; 
+        const roleId = decodedToken.roleId; // Adjust if necessary
+        console.log('Role ID:', roleId);
 
         if (roleId) {
           localStorage.setItem('roleId', roleId.toString());
