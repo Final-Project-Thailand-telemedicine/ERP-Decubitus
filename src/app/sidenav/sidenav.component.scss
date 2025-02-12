@@ -7,34 +7,39 @@
     width: 5rem;
     height: 100vh;
     box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .Logo-container {
         display: flex;
         align-items: center;
-        padding: 0.938rem 0.938rem 0 0.938rem;
+        justify-content: center;
+        padding: 0.938rem;
         width: 100%;
 
-        /* Logo Button */
-.Logo {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-}
+        .Logo {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
 
-/* Material Avatar */
-.logo-avatar {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
-}
+        .Logo img {
+            background-color: white;
+            border-radius: 0.625rem;
+            width: 100%;
+            height: auto;
+            max-width: 92px;
+            max-height: 92px;
+            object-fit: contain; /* Ensures the image scales properly */
+            margin: 0.5rem;
+            
+        }
 
-        
         .Logo-text {
             margin-left: 1.5rem;
             font-size: 24px;
@@ -99,7 +104,7 @@
             }
 
             .sidenav-link-text {
-                margin-left: 1,5rem;
+                margin-left: 1.5rem;
             }
         }
     }
