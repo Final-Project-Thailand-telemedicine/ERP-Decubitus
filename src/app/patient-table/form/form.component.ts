@@ -70,7 +70,7 @@ export class FormComponent implements OnInit {
       last_name: ['', Validators.required],
       birthdate: ['', Validators.required],
       password: ['', Validators.required],
-      profile_image: [null]
+      profile_image: [null, Validators.required] // Add Validators.required
     });
   }
 

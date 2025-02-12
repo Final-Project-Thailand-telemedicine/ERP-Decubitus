@@ -10,7 +10,7 @@ import { PatientService } from '../../service/patient.service';
 @Component({
   selector: 'app-delete-patient',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatDialogModule, MatButtonModule, NgIf],
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatDialogModule, MatButtonModule],
   templateUrl: './delete-patient.component.html',
   styleUrls: ['./delete-patient.component.scss']
 })
