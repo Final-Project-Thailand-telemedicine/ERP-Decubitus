@@ -8,7 +8,7 @@ import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-patient-numbers',
   standalone: true,
-  imports: [HighchartsChartModule,NgIf],
+  imports: [HighchartsChartModule, NgIf],
   template: `<div *ngIf="chartOptions">
     <highcharts-chart 
       [Highcharts]="Highcharts" 
@@ -29,14 +29,52 @@ export class PatientNumbersComponent implements OnInit {
 
       setTimeout(() => { // Add a small delay to ensure change detection
         this.chartOptions = {
-          chart: { type: 'line', height: 325 },
-          title: { text: 'จำนวนแผลแต่ละระดับ' },
-          xAxis: { 
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] 
+          chart: { 
+            type: 'line', 
+            height: 325,
+            style: {
+              fontFamily: 'Anuphan, sans-serif' // Change font for the entire chart
+            }
           },
-          yAxis: { title: { text: '' } },
+          title: { 
+            text: 'จำนวนแผลแต่ละระดับ',
+            style: {
+              fontFamily: 'Anuphan, sans-serif' // Change font for the title
+            }
+          },
+          xAxis: { 
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: {
+              style: {
+                fontFamily: 'Anuphan, sans-serif' // Change font for the xAxis labels
+              }
+            }
+          },
+          yAxis: { 
+            title: { 
+              text: '',
+              style: {
+                fontFamily: 'Anuphan, sans-serif' // Change font for the yAxis title
+              }
+            },
+            labels: {
+              style: {
+                fontFamily: 'Anuphan, sans-serif' // Change font for the yAxis labels
+              }
+            }
+          },
           series: response, // Use backend response
-          credits: { enabled: false }
+          credits: { enabled: false },
+          legend: {
+            itemStyle: {
+              fontFamily: 'Anuphan, sans-serif' // Change font for the legend
+            }
+          },
+          tooltip: {
+            style: {
+              fontFamily: 'Anuphan, sans-serif' // Change font for the tooltip
+            }
+          }
         };
 
         this.cdr.detectChanges(); // Trigger Angular change detection

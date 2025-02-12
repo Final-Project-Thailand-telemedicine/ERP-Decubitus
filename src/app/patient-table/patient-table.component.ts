@@ -1,8 +1,6 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { PatientService } from '../service/patient.service';
 import { Config } from 'datatables.net';
@@ -12,6 +10,8 @@ import { faXmark, faFileImage, faPlusSquare, faTrash, faPen } from '@fortawesome
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormComponent } from './form/form.component';
 import { EditPatientComponent } from './edit-patient/edit-patient.component';
+import { DeletePatientComponent } from './delete-patient/delete-patient.component';
+
 @Component({
   selector: 'app-patient-table',
   standalone: true,
@@ -26,19 +26,22 @@ import { EditPatientComponent } from './edit-patient/edit-patient.component';
   styleUrl: './patient-table.component.scss'
 })
 export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
-  constructor
-    (
-      private _patientService: PatientService,
-      private _changeDetectorRef: ChangeDetectorRef,
-      private dialog: MatDialog,
-    ) { }
-  fafileimage = faFileImage;
+  
+  constructor(
+    private _patientService: PatientService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private dialog: MatDialog
+  ) { }
+
+  faFileImage = faFileImage;
   faXmark = faXmark;
-  faPlusSquare = faPlusSquare
+  faPlusSquare = faPlusSquare;
+  faPen = faPen;
+  faTrash = faTrash;
+
   dtOptions: Config = {};
   dtTrigger: Subject<any> = new Subject();
-  @ViewChild(DataTableDirective)
-  dtElement!: DataTableDirective
+  @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   languageUrl = 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json';
   dataRow: any[] = [];
   isLoading: boolean = false;
@@ -47,67 +50,33 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
     this.loadTable();
   }
 
-  showPicture(imgObject: any): void {
-    this.dialog
-      .open(PictureComponent, {
-        width: 'auto',
-        height: 'auto',
-        disableClose: true,
-        data: {
-          imgSelected: imgObject,
-        },
-        panelClass: 'picture-dialog',
-      })
-      .afterClosed()
-      .subscribe(() => {
-
-      });
-  }
-
-  addElement() {
-    const dialogRef = this.dialog.open(FormComponent, {
-      width: '800px',
-      height: 'auto',
-      disableClose: true,
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-
-      this.rerender();
-    });
-  }
-
-  pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
-
   loadTable(): void {
-
     const that = this;
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       serverSide: true,
       processing: true,
+      searching: true, // ✅ Enables search input
+      ordering: true,  // ✅ Enables sorting
       language: {
         url: this.languageUrl,
       },
       ajax: (dataTablesParameters: any, callback) => {
+        // Extract search and sorting parameters
+        const searchValue = dataTablesParameters.search.value || '';
+        const orderColumnIndex = dataTablesParameters.order?.[0]?.column || 1; 
+        const orderDirection = dataTablesParameters.order?.[0]?.dir || 'asc';
+
         that._patientService
-          .getPage(dataTablesParameters)
+          .getPage({
+            ...dataTablesParameters,
+            search: searchValue,
+            sortColumn: orderColumnIndex,
+            sortDirection: orderDirection,
+          })
           .subscribe((resp: any) => {
-            console.log(resp);
-
             this.dataRow = resp.data;
-            this.pages.current_page = resp.meta.currentPage;
-            this.pages.last_page = resp.meta.totalPages;
-            this.pages.per_page = resp.meta.itemsPerPage;
-            if (resp.meta.currentPage > 1) {
-              this.pages.begin =
-                resp.meta.itemsPerPage * resp.meta.currentPage - 1;
-            } else {
-              this.pages.begin = 0;
-            }
-
             callback({
               recordsTotal: resp.meta.totalItems,
               recordsFiltered: resp.meta.totalItems,
@@ -115,9 +84,16 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
             });
             this._changeDetectorRef.markForCheck();
           });
-      }
+      },
+      columns: [
+        { data: null, orderable: false }, // Actions column
+        { data: 'id' },
+        { data: 'first_name' },
+        { data: 'last_name' },
+        { data: 'sex' },
+        { data: 'profile_image', orderable: false } // Image column
+      ]
     };
-
   }
 
   ngAfterViewInit(): void {
@@ -125,38 +101,60 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    // Do not forget to unsubscribe the event
     this.dtTrigger.unsubscribe();
   }
 
   rerender(): void {
-    this.loadTable();
     this.dtElement.dtInstance.then((dtInstance) => {
       dtInstance.ajax.reload();
     });
   }
 
-  faPen = faPen;
-  editElement(id: number) {
-    console.log('Edit user with ID:', id);
-    const dialogRef = this.dialog.open(EditPatientComponent, {
+  showPicture(imgObject: any): void {
+    this.dialog.open(PictureComponent, {
+      width: 'auto',
+      height: 'auto',
+      disableClose: true,
+      data: { imgSelected: imgObject },
+      panelClass: 'picture-dialog',
+    });
+  }
+
+  addElement() {
+    const dialogRef = this.dialog.open(FormComponent, {
       width: '800px',
       height: 'auto',
       disableClose: true,
-      data: {
+    });
+    dialogRef.afterClosed().subscribe(() => this.rerender());
+  }
+
+  editElement(id: number) {
+    this.dialog.open(EditPatientComponent, {
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+      data: { id: id },
+    });
+  }
+
+  deleteElement(id: number, firstName: string, lastName: string) {
+    const dialogRef = this.dialog.open(DeletePatientComponent, {
+      width: '350px',
+      disableClose: true,
+      data: { 
+        message: `คุณต้องการลบผู้ใช้ชื่อ ${firstName} ${lastName} หรือไม่`, 
         id: id,
+        firstName: firstName,
+        lastName: lastName
       },
-
     });
-
-  }
-
-  faTrash = faTrash;
-  deleteElement(id: number) {
-    this._patientService.delete(id).subscribe((resp: any) => {
-      this.rerender();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Deleting item with ID:', id);
+      } else {
+        console.log('Deletion canceled');
+      }
     });
   }
-
-
 }

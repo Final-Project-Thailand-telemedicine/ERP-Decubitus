@@ -134,5 +134,6 @@ export class EditPatientComponent implements OnInit{
 
       this.dialogRef.close(formValue);
     }
+    window.location.reload();
   }
 }

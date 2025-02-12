@@ -135,5 +135,6 @@ export class EditNurseComponent {
 
       this.dialogRef.close(formValue);
     }
+    window.location.reload();
   }
 }

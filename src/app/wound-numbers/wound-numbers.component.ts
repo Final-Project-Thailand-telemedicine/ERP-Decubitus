@@ -7,7 +7,7 @@ import { NgIf } from '@angular/common';
 @Component({
   selector: 'app-wound-numbers',
   standalone: true,
-  imports: [HighchartsChartModule,NgIf],
+  imports: [HighchartsChartModule, NgIf],
   templateUrl: './wound-numbers.component.html',
   styleUrls: ['./wound-numbers.component.scss']
 })
@@ -37,14 +37,23 @@ export class WoundNumbersComponent implements OnInit {
   chartOptions: Highcharts.Options = {
     chart: {
       type: 'pie',
-      height: 325
+      height: 325,
+      style: {
+        fontFamily: 'Anuphan, sans-serif' // Change font for the entire chart
+      }
     },
     title: {
       text: 'จำนวนแผลจำแนกตามอาการ',
-      align: 'left'
+      align: 'left',
+      style: {
+        fontFamily: 'Anuphan, sans-serif' // Change font for the title
+      }
     },
     tooltip: {
-      pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+      pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>',
+      style: {
+        fontFamily: 'Anuphan, sans-serif' // Change font for the tooltip
+      }
     },
     accessibility: {
       point: {
@@ -57,7 +66,10 @@ export class WoundNumbersComponent implements OnInit {
         cursor: 'pointer',
         dataLabels: {
           enabled: true,
-          format: '<b>{point.name}</b>: {point.y} แผล'
+          format: '<b>{point.name}</b>: {point.y} แผล',
+          style: {
+            fontFamily: 'Anuphan, sans-serif' // Change font for the data labels
+          }
         },
         showInLegend: false
       }
@@ -65,7 +77,10 @@ export class WoundNumbersComponent implements OnInit {
     legend: {
       layout: 'vertical',
       align: 'right',
-      verticalAlign: 'middle'
+      verticalAlign: 'middle',
+      itemStyle: {
+        fontFamily: 'Anuphan, sans-serif' // Change font for the legend
+      }
     },
     series: [
       {

@@ -1,1 +1,8 @@
-<p>delete-nurse works!</p>
+<h2 mat-dialog-title>ลบพยาบาล</h2>
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">ยกเลิก</button>
+  <button mat-button color="warn" (click)="onConfirm(data.id)">ตกลง</button>
+</mat-dialog-actions>

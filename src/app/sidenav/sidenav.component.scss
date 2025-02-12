@@ -14,18 +14,27 @@
         padding: 0.938rem 0.938rem 0 0.938rem;
         width: 100%;
 
-        .Logo {
-            background: #fff;
-            text-align: center;
-            width: 3rem;
-            min-width: 3rem;
-            border-radius: 0.313rem;
-            font-size: 24px;
-            font-weight: 900;
-            cursor: pointer;
-            border: none;
-        }
+        /* Logo Button */
+.Logo {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
 
+/* Material Avatar */
+.logo-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+}
+
+        
         .Logo-text {
             margin-left: 1.5rem;
             font-size: 24px;

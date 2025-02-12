@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { RecoveryModalComponent } from '../recovery-modal/recovery-modal.component';
 import { AuthService } from '../service/auth.service';
 import { KeyService } from '../service/key.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ import { KeyService } from '../service/key.service';
     MatDialogModule,
   ],
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   recoveryForm: FormGroup;
 
@@ -31,7 +32,8 @@ export class LoginComponent implements OnInit{
     private fb: FormBuilder,
     private authService: AuthService,
     private dialog: MatDialog,
-    private _KeyService: KeyService
+    private _KeyService: KeyService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -52,7 +54,14 @@ export class LoginComponent implements OnInit{
       const data = this.loginForm.value;
       
       data.password = await this._KeyService.encryptPassword(data.password);
-      this.authService.login(data);
+      
+      this.authService.login(data).subscribe((roleId) => {
+        if (roleId === 1) {
+          this.router.navigate(['/dashboard']); // Full access
+        } else {
+          this.router.navigate(['/dashboard']); // Limited access
+        }
+      });
     }
   }
 

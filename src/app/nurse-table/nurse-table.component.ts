@@ -11,6 +11,7 @@ import { PictureComponent } from '../picture/picture.component';
 import { NurseService } from '../service/nurse.service';
 import { FormComponent } from './form/form.component';
 import { EditNurseComponent } from './edit-nurse/edit-nurse.component';
+import { DeleteNurseComponent } from './delete-nurse/delete-nurse.component';
 
 
 @Component({
@@ -34,9 +35,13 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
   ) { }
-  fafileimage= faFileImage;
+
+  faFileImage = faFileImage;
   faXmark = faXmark;
-  faPlusSquare = faPlusSquare
+  faPlusSquare = faPlusSquare;
+  faPen = faPen;
+  faTrash = faTrash;
+
   dtOptions: Config = {};
   dtTrigger: Subject<any> = new Subject();
   @ViewChild(DataTableDirective)
@@ -47,37 +52,6 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
 
   ngOnInit() {
     this.loadTable();
-  }
-
-  showPicture(imgObject: any): void {
-    this.dialog
-      .open(PictureComponent, {
-        width: 'auto',
-        height: 'auto',
-        disableClose: true,
-        data: {
-          imgSelected: imgObject,
-        },
-        panelClass: 'picture-dialog',
-      })
-      .afterClosed()
-      .subscribe(() => {
-
-      });
-  }
-
-  addElement() {
-    const dialogRef = this.dialog.open(FormComponent, {
-      width: '800px',
-      height: 'auto',
-      disableClose: true,
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-        
-        this.rerender();
-    });
   }
 
   pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
@@ -138,28 +112,51 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
     });
   }
 
-  faPen = faPen;  
-  editElement(id: number) {
-    const dialogRef = this.dialog.open(EditNurseComponent, {
-      width: '800px',
+  showPicture(imgObject: any): void {
+    this.dialog.open(PictureComponent, {
+      width: 'auto',
       height: 'auto',
       disableClose: true,
-      data: {
-        id: id,
-      },
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-        
-        this.rerender();
+      data: { imgSelected: imgObject },
+      panelClass: 'picture-dialog',
     });
   }
 
-  faTrash = faTrash;
-  deleteElement(id: number) {
-    this._nurseService.delete(id).subscribe((resp: any) => {
-      this.rerender();
+  addElement() {
+    const dialogRef = this.dialog.open(FormComponent, {
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe(() => this.rerender());
+  }
+
+  editElement(id: number) {
+    this.dialog.open(EditNurseComponent, {
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+      data: { id: id },
+    });
+  }
+
+  deleteElement(id: number, firstName: string, lastName: string) {
+    const dialogRef = this.dialog.open(DeleteNurseComponent, {
+      width: '350px',
+      disableClose: true,
+      data: { 
+        message: `คุณต้องการลบพยาบาลชื่อ ${firstName} ${lastName} หรือไม่`, 
+        id: id,
+        firstName: firstName,
+        lastName: lastName
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Deleting item with ID:', id);
+      } else {
+        console.log('Deletion canceled');
+      }
     });
   }
 }

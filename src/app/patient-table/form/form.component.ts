@@ -115,14 +115,15 @@ export class FormComponent implements OnInit {
 
       this._Patientservice.create(formValue).subscribe({
         next: (response) => {
-          console.log('Product created successfully', response);
+          console.log('Patient created successfully', response);
         },
         error: (error) => {
-          console.error('Error creating product', error);
+          console.error('Error creating patient', error);
         }
       });
 
       this.dialogRef.close(formValue);
     }
+    window.location.reload();
   }
 }

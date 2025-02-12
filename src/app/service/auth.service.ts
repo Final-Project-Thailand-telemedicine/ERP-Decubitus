@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, of, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -23,33 +24,39 @@ export class AuthService {
       })
     );
   }
-  login(credentials: { username: string; password: string }) {
+
+  login(credentials: { username: string; password: string }): Observable<number | null> {
     const body = {
       ssid: credentials.username,
       password: credentials.password,
     };
-  
-    this._httpClient.post(environment.baseURL + '/auth/login', body).pipe(
+
+    return this._httpClient.post(environment.baseURL + '/auth/login', body).pipe(
       switchMap((response: any) => {
-        localStorage.setItem('token', response.accessToken);
+        const token = response.accessToken;
+        localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', response.refreshToken);
-  
-        return this.router.navigate(['/dashboard']);
+
+        // Decode JWT to get role ID
+        const decodedToken: any = jwtDecode(token);
+        // const roleId = decodedToken.roleId; // Adjust if necessary
+        const roleId = 1; 
+
+        if (roleId) {
+          localStorage.setItem('roleId', roleId.toString());
+        }
+
+        return of(roleId);
       }),
       catchError((error) => {
-        // Handle error and log it
         console.error('Login failed', error);
-  
         alert('Login failed. Please check your credentials.');
-  
         return of(null);
       })
-    ).subscribe();
+    );
   }
-  
 
   recoverPassword(email: string) {
-    // Simulate password recovery
     return of({ success: true });
   }
 }
