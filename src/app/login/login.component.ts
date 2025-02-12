@@ -4,12 +4,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { RecoveryModalComponent } from '../recovery-modal/recovery-modal.component';
 import { AuthService } from '../service/auth.service';
 import { KeyService } from '../service/key.service';
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -22,11 +22,14 @@ import { Router } from '@angular/router';
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
+    MatIconModule,
   ],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   recoveryForm: FormGroup;
+  hidePassword: boolean = true;
+ 
 
   constructor(
     private fb: FormBuilder,
@@ -61,6 +64,9 @@ export class LoginComponent implements OnInit {
         } else {
           this.router.navigate(['/dashboard']); // Limited access
         }
+      },
+      (error) => {
+        console.error('Login failed', error);
       });
     }
   }
@@ -75,5 +81,9 @@ export class LoginComponent implements OnInit {
         alert('Recovery link sent!');
       }
     });
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
   }
 }
