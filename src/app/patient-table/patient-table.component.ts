@@ -92,6 +92,7 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
         url: this.languageUrl,
       },
       ajax: (dataTablesParameters: any, callback) => {
+        
         that._patientService
           .getPage(dataTablesParameters)
           .subscribe((resp: any) => {

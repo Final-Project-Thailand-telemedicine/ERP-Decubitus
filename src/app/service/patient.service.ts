@@ -12,19 +12,38 @@ export class PatientService {
 
   constructor(private _httpClient: HttpClient) { }
 
-  getPage(dataTablesParameters: any, id: number = 2): Observable<DataTablesResponse> {
+  private columnMap: { [key: number]: string } = {
+    0: '',
+    1: 'id',
+    2: 'first_name',
+    3: 'last_name',
+    4: 'ssid',
+    5: 'createdAt'
+  };
 
-    return this._httpClient
-      .get(
-        environment.baseURL + '/users/role/' + id,
-        dataTablesParameters
-      )
-      .pipe(
-        switchMap((response: any) => {
-
-          return of(response);
-        })
-      );
+  getPage(dataTablesParameters: any, id: number = 2): Observable<any> {
+    // console.log(dataTablesParameters);
+    
+    const params: any = {
+      page: Math.floor(dataTablesParameters.start / dataTablesParameters.length) + 1,
+      limit: dataTablesParameters.length,
+      search: dataTablesParameters.search.value || undefined,
+      searchBy: ['first_name', 'last_name', 'ssid'],
+      sortBy: dataTablesParameters.order?.length
+        ? [this.mapColumn(dataTablesParameters.order[0].column), dataTablesParameters.order[0].dir.toUpperCase()]
+        : undefined,
+    };
+    
+    console.log("params:", params);
+    
+    if (!params.search) delete params.search;
+    if (!params.sortBy) delete params.sortBy;
+  
+    return this._httpClient.get(`${environment.baseURL}/users/role/${id}`, { params });
+  }
+  
+  private mapColumn(index: number): string {
+    return this.columnMap[index] || 'id';
   }
 
   create(data: FormData): Observable<any> {
