@@ -67,7 +67,6 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
         const searchValue = dataTablesParameters.search.value || '';
         const orderColumnIndex = dataTablesParameters.order?.[0]?.column || 1; 
         const orderDirection = dataTablesParameters.order?.[0]?.dir || 'asc';
-
         that._patientService
           .getPage({
             ...dataTablesParameters,
