@@ -50,32 +50,36 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
     this.loadTable();
   }
 
+  pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
+
   loadTable(): void {
+
     const that = this;
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       serverSide: true,
       processing: true,
-      searching: true, // ✅ Enables search input
-      ordering: true,  // ✅ Enables sorting
       language: {
         url: this.languageUrl,
       },
       ajax: (dataTablesParameters: any, callback) => {
-        // Extract search and sorting parameters
-        const searchValue = dataTablesParameters.search.value || '';
-        const orderColumnIndex = dataTablesParameters.order?.[0]?.column || 1; 
-        const orderDirection = dataTablesParameters.order?.[0]?.dir || 'asc';
         that._patientService
-          .getPage({
-            ...dataTablesParameters,
-            search: searchValue,
-            sortColumn: orderColumnIndex,
-            sortDirection: orderDirection,
-          })
+          .getPage(dataTablesParameters)
           .subscribe((resp: any) => {
+            console.log(resp);
+            
             this.dataRow = resp.data;
+            this.pages.current_page = resp.meta.currentPage;
+            this.pages.last_page = resp.meta.totalPages;
+            this.pages.per_page = resp.meta.itemsPerPage;
+            if (resp.meta.currentPage > 1) {
+              this.pages.begin =
+              resp.meta.itemsPerPage * resp.meta.currentPage - 1;
+            } else {
+              this.pages.begin = 0;
+            }
+
             callback({
               recordsTotal: resp.meta.totalItems,
               recordsFiltered: resp.meta.totalItems,
@@ -83,15 +87,7 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
             });
             this._changeDetectorRef.markForCheck();
           });
-      },
-      columns: [
-        { data: null, orderable: false }, // Actions column
-        { data: 'id' },
-        { data: 'first_name' },
-        { data: 'last_name' },
-        { data: 'sex' },
-        { data: 'profile_image', orderable: false } // Image column
-      ]
+      }
     };
   }
 

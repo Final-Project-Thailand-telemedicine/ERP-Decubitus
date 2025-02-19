@@ -24,10 +24,12 @@
                         <tr class="table-header">
                             <th class="table-cell">จัดการ</th>
                             <th class="table-cell">ลําดับ</th>
+                            <th class="table-cell">เลขบัตรประชาชน</th>
                             <th class="table-cell">ชื่อ</th>
                             <th class="table-cell">นามสกุล</th>
                             <th class="table-cell">เพศ</th>
                             <th class="table-cell">รูปภาพ</th>
+                            
                         </tr>
                     </thead>
                     <tbody *ngIf="dataRow?.length != 0" class="table-body">
@@ -51,6 +53,7 @@
                     
                             <!-- Other Columns -->
                             <td class="table-cell text-center">{{ i + 1 }}</td>
+                            <td class="table-cell text-center">{{ item.ssid || "-" }}</td> 
                             <td class="table-cell text-center">{{ item.first_name || "-" }}</td>
                             <td class="table-cell text-center">{{ item.last_name || "-" }}</td>
                             <td class="table-cell text-center">{{ item.sex || "-" }}</td>
@@ -62,7 +65,7 @@
                         </tr>
                     </tbody>                    
                     <tbody *ngIf="dataRow?.length == 0">
-                        <td colspan="6" class="no-data-message">ไม่พบข้อมูล</td>
+                        <td colspan="7" class="no-data-message">ไม่พบข้อมูล</td> <!-- Updated colspan -->
                     </tbody>
                 </table>
             </div>
