@@ -121,7 +121,12 @@ export class EditPatientComponent implements OnInit{
     if (this.patientForm.valid) {
       const formValue = { ...this.patientForm.value };
 
-      formValue.password = await this._keyService.encryptPassword(formValue.password);
+      if(formValue.password){
+        formValue.password = await this._keyService.encryptPassword(formValue.password);
+      }
+      else{
+        delete formValue.password;
+      }
 
       this._Patientservice.update(formValue,this.data.id).subscribe({
         next: (response) => {
