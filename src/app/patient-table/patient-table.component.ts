@@ -138,7 +138,7 @@ export class PatientTableComponent implements AfterViewInit, OnDestroy, OnInit {
       width: '350px',
       disableClose: true,
       data: { 
-        message: `คุณต้องการลบผู้ใช้ชื่อ ${firstName} ${lastName} หรือไม่`, 
+        message: `คุณต้องการลบผู้ป่วย ชื่อ ${firstName} ${lastName} หรือไม่`, 
         id: id,
         firstName: firstName,
         lastName: lastName

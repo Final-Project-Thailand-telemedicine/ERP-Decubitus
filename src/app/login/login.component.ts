@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(data).subscribe((roleId) => {
         if (roleId === 1) {
           this.router.navigate(['/dashboard']); // Full access
-        } else {
+        } else if (roleId === 2 ){
           this.router.navigate(['/dashboard']); // Limited access
         }
       },

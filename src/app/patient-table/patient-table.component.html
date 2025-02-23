@@ -56,7 +56,7 @@
                             <td class="table-cell text-center">{{ item.ssid || "-" }}</td> 
                             <td class="table-cell text-center">{{ item.first_name || "-" }}</td>
                             <td class="table-cell text-center">{{ item.last_name || "-" }}</td>
-                            <td class="table-cell text-center">{{ item.sex || "-" }}</td>
+                            <td class="table-cell text-center">{{ item.sex === 'Female' ? 'หญิง' : item.sex === 'Male' ? 'ชาย' : item.sex || "-" }}</td>
                             <td class="table-cell text-center">
                                 <button mat-button class="view-button" (click)="showPicture(item.profile_image)">
                                     <fa-icon [icon]="faFileImage"></fa-icon>
