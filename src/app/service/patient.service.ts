@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { DataTablesResponse } from '../../type/datatable.type';
@@ -84,5 +84,11 @@ export class PatientService {
           return of(response);
         })
       );
+  }
+
+  checkSsid(ssid: string): Observable<boolean> {
+    return this._httpClient.get<{ isDuplicate: boolean }>(`/api/check-ssid?ssid=${ssid}`).pipe(
+      map(response => response.isDuplicate)
+    );
   }
 }
