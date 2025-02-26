@@ -22,6 +22,8 @@
       </mat-error>
     </mat-form-field>
 
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div> <!-- Add this line -->
+
     <button mat-raised-button color="primary" [disabled]="loginForm.invalid" type="submit" class="custom-button">
       เข้าสู่ระบบ
     </button>

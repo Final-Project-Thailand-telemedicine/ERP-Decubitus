@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -74,9 +74,9 @@ export class EditPatientComponent implements OnInit{
 
   private initForm() {
     this.patientForm = this.fb.group({
-      ssid: ['', Validators.required],
+      ssid: ['', [Validators.required, this.ssidValidator.bind(this)]],
       sex: ['', Validators.required],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, this.phoneValidator.bind(this)]],
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       birthdate: ['', Validators.required],
@@ -84,6 +84,22 @@ export class EditPatientComponent implements OnInit{
       profile_image: [null]
     });
   }
+
+  ssidValidator(control: AbstractControl): ValidationErrors | null {
+      const ssid = control.value;
+      if (ssid && ssid.length !== 13) {
+        return { invalidSsid: 'กรุณากรอกให้ครบ 13 หลัก' };
+      }
+      return null;
+    }
+  
+    phoneValidator(control: AbstractControl): ValidationErrors | null {
+      const phone = control.value;
+      if (phone && phone.length !== 10) {
+        return { invalidPhone: 'กรุณากรอกให้ครบ 10 หลัก' };
+      }
+      return null;
+    }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -131,14 +147,15 @@ export class EditPatientComponent implements OnInit{
       this._Patientservice.update(formValue,this.data.id).subscribe({
         next: (response) => {
           console.log('Product created successfully', response);
+          alert('Patient edited successfully');
+          this.dialogRef.close(formValue);
+          window.location.reload();
         },
         error: (error) => {
           console.error('Error creating product', error);
+          alert('Error edited patient: ' + error.error.message);
         }
       });
-
-      this.dialogRef.close(formValue);
     }
-    window.location.reload();
   }
 }

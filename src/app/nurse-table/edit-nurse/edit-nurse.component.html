@@ -1,7 +1,7 @@
 <div class="form-container">
     <!-- Image Upload Section -->
     <div class="image-upload-section">
-        <h2>{{ isEdit ? 'แก้ไขข้อมูลผู้ป่วย' : 'เพิ่มข้อมูลผู้ป่วย' }}</h2>
+        <h2>{{ isEdit ? 'แก้ไขข้อมูลพยาบาล' : 'เพิ่มข้อมูลพยาบาล' }}</h2>
         <div class="image-preview">
             <img *ngIf="imagePreview" [src]="imagePreview">
             <fa-icon *ngIf="!imagePreview" [icon]="faFileImage"></fa-icon>
@@ -22,6 +22,9 @@
                 <mat-error *ngIf="nurseForm.get('ssid')?.hasError('required')">
                     กรุณากรอกเลขบัตรประชาชน
                 </mat-error>
+                <mat-error *ngIf="nurseForm.get('ssid')?.hasError('invalidSsid')">
+                    {{ nurseForm.get('ssid')?.getError('invalidSsid') }}
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field class="w-full">
@@ -40,6 +43,9 @@
                 <input matInput type="text" formControlName="phone" placeholder="กรอกเบอร์โทร">
                 <mat-error *ngIf="nurseForm.get('phone')?.hasError('required')">
                     กรุณากรอกเบอร์โทร
+                </mat-error>
+                <mat-error *ngIf="nurseForm.get('phone')?.hasError('invalidPhone')">
+                    {{ nurseForm.get('phone')?.getError('invalidPhone') }}
                 </mat-error>
             </mat-form-field>
 

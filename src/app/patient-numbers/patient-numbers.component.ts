@@ -63,7 +63,10 @@ export class PatientNumbersComponent implements OnInit {
               }
             }
           },
-          series: response, // Use backend response
+          series: response.map((series: any, index: number) => ({
+            ...series,
+            color: ['#ffc080', '#ff9a34', '#ff0000', '#b30000', '#ef4444'][index] // Custom colors for each series
+          })),
           credits: { enabled: false },
           legend: {
             itemStyle: {

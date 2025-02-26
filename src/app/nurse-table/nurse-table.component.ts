@@ -64,6 +64,7 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
       pageLength: 10,
       serverSide: true,
       processing: true,
+      ordering: false,
       language: {
         url: this.languageUrl,
       },

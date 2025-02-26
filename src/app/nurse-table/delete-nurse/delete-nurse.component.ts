@@ -24,6 +24,7 @@ export class DeleteNurseComponent {
   onConfirm(id: number) {
     this.dialogRef.close(true);
     this._nurseService.delete(id).subscribe((resp: any) => {
+      alert('Nurse delete successfully');
       window.location.reload();
     });
   }

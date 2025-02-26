@@ -103,6 +103,16 @@
       font-size: 0.85rem;
     }
   }
+
+  .error-message {
+    color: red;
+    border: 1px solid red;
+    background-color: #ffe6e6; /* Light red background */
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
 }
 
 mat-form-field {

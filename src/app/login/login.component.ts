@@ -10,6 +10,7 @@ import { RecoveryModalComponent } from '../recovery-modal/recovery-modal.compone
 import { AuthService } from '../service/auth.service';
 import { KeyService } from '../service/key.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -29,7 +30,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   recoveryForm: FormGroup;
   hidePassword: boolean = true;
- 
+  errorMessage: string | null = null; // Add this line
 
   constructor(
     private fb: FormBuilder,
@@ -61,12 +62,17 @@ export class LoginComponent implements OnInit {
       this.authService.login(data).subscribe((roleId) => {
         if (roleId === 1) {
           this.router.navigate(['/dashboard']); // Full access
+        } else if (roleId === 3 ){
+          this.router.navigate(['/dashboard']); 
         } else if (roleId === 2 ){
-          this.router.navigate(['/dashboard']); // Limited access
+          this.errorMessage = 'คุณไม่มีสิทธิ์เข้าใช้งาน'; 
+        } else {
+          this.errorMessage = 'เลขบัตรประชาชนหรือรหัสผ่านไม่ถูกต้อง'; // Set error message
         }
       },
       (error) => {
         console.error('Login failed', error);
+        this.errorMessage = 'เลขบัตรประชาชนหรือรหัสผ่านไม่ถูกต้อง'; // Set error message
       });
     }
   }

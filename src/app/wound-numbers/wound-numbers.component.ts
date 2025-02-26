@@ -16,10 +16,10 @@ export class WoundNumbersComponent implements OnInit {
 
   ngOnInit(): void {
     this.dashboardService.getMiddleWidgets2().subscribe((response: any) => {
-      const formattedData = response.map((item: any) => ({
+      const formattedData = response.map((item: any, index: number) => ({
         name: item.name,
         y: item.data,
-        color: item.color
+        color: ['#ffc000', '#cc0000', '#00cd00'][index] // Custom colors for each slice
       }));
   
       setTimeout(() => {

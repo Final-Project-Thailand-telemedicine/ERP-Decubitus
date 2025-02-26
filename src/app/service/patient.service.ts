@@ -85,10 +85,4 @@ export class PatientService {
         })
       );
   }
-
-  checkSsid(ssid: string): Observable<boolean> {
-    return this._httpClient.get<{ isDuplicate: boolean }>(`/api/check-ssid?ssid=${ssid}`).pipe(
-      map(response => response.isDuplicate)
-    );
-  }
 }
