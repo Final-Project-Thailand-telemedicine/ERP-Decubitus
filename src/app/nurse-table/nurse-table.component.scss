@@ -88,7 +88,7 @@
 
             .table-cell {
               padding: 1rem;
-              text-align: left;
+              text-align: left; // Align text to the left
               font-size: 0.875rem;
               font-weight: 500;
               color: #374151; // Gray text
@@ -105,13 +105,9 @@
 
             .table-cell {
               padding: 1rem;
-              text-align: left;
+              text-align: left; // Align text to the left
               font-size: 0.875rem;
               color: #4b5563; // Dark gray text
-
-              &.text-center {
-                text-align: center;
-              }
             }
 
             .action-buttons {
@@ -119,25 +115,27 @@
               justify-content: left;
               gap: 3rem;
 
-              .edit-button {
-                color: #2563eb; // Blue
+              .edit-button,
+              .delete-button {
+                color: #2563eb; // Blue for edit button
                 background: none;
                 border: none;
                 cursor: pointer;
 
                 &:hover {
-                  color: #1e40af; // Darker blue on hover
+                  color: #1e40af; // Darker blue on hover for edit button
+                }
+
+                fa-icon {
+                  font-size: 1rem; // Fixed size for the icons
                 }
               }
 
               .delete-button {
-                color: #dc2626; // Red
-                background: none;
-                border: none;
-                cursor: pointer;
+                color: #dc2626; // Red for delete button
 
                 &:hover {
-                  color: #991b1b; // Darker red on hover
+                  color: #991b1b; // Darker red on hover for delete button
                 }
               }
             }
