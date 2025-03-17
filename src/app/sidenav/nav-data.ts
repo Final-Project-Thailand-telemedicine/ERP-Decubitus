@@ -14,7 +14,7 @@ export const navbarData = [
     {
         routeLink: 'patients',
         icon: faUser,
-        label: 'คนไข้'
+        label: 'ผู้ป่วย'
     },
     {
         routeLink: 'nurses',
